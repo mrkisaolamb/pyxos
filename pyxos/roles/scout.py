@@ -1,4 +1,7 @@
+import six
+
+
 class Scout(object):
     def __init__(self, message):
-        print 'doing scouty things'
-        print message
+        six.print_('doing scouty things')
+        six.print_(message)
