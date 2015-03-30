@@ -20,7 +20,8 @@ def mule_loop():
     while True:
         six.print_("mule: Waiting for messages... yawn.")
         message = uwsgi.mule_get_msg()
-        Scout(message)
+        if message == "calling leader":
+            scout = Scout(message)
 
 if __name__ == '__main__':
     mule_loop()
