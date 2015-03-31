@@ -1,8 +1,10 @@
 language: python
+# use docker infrastructure
+sudo: false
 install:
   - pip install tox
 script:
-    - tox
+  - tox
 env:
   - TOXENV=py26
   - TOXENV=py27
