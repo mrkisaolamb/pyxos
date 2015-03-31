@@ -15,26 +15,21 @@
 import pykka
 import six
 
-from roles import replica
-
-
-REPLICAS = []
-
-
-def start_replicas():
-    for i in range(5):
-        r = replica.Replica.start(str(i))
-        REPLICAS.append(r)
+from pyxos import farm
 
 
 if __name__ == '__main__':
-    start_replicas()
+    f = farm.Farm()
 
-    ret = REPLICAS[0].ask({'command': 'get', 'key': 'x'}, timeout=3)
+    ret = f.get('replica', 'replica_1').ask({'command': 'get', 'key': 'x'},
+                                            timeout=3)
     six.print_('Replica returned', ret)
 
-    REPLICAS[0].tell({'command': 'set', 'key': 'x', 'value': '1'})
-    ret = REPLICAS[0].ask({'command': 'get', 'key': 'x'}, timeout=3)
+    f.get('replica', 'replica_1').tell({
+        'command': 'set', 'key': 'x', 'value': '1'
+    })
+    ret = f.get('replica', 'replica_1').ask({'command': 'get', 'key': 'x'},
+                                            timeout=3)
     six.print_('Replica returned', ret)
 
     pykka.ActorRegistry.stop_all()

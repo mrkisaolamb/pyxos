@@ -36,3 +36,7 @@ class Replica(pykka.ThreadingActor):
             value = message['value']
 
             self.machine.op(key, value)
+
+        # TODO(CGenie): abstract this command to all roles
+        elif command == 'name':
+            return self.name
