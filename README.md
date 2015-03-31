@@ -1,2 +1,0 @@
-# pyxos
-Paxos implementation
