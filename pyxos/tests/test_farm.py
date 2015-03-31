@@ -19,44 +19,44 @@ from pyxos import farm
 
 @mock.patch('pyxos.lib.state_machine.open', create=True)
 class TestFarm(unittest.TestCase):
+    def setUp(self):
+        self.farm = farm.Farm(num_acceptors=3, num_replicas=2, num_leaders=1)
+
     def tearDown(self):
         pykka.ActorRegistry.stop_all()
 
     def test_farm_initialization(self, mopen):
         mopen.return_value = mock.MagicMock(spec=file)
 
-        f = farm.Farm(num_acceptors=3, num_replicas=2, num_leaders=1)
         self.assertItemsEqual(
-            f.farm['acceptor'].keys(),
+            self.farm.farm['acceptor'].keys(),
             ['acceptor_0', 'acceptor_1', 'acceptor_2']
         )
         self.assertItemsEqual(
-            f.farm['leader'].keys(),
+            self.farm.farm['leader'].keys(),
             ['leader_0']
         )
         self.assertItemsEqual(
-            f.farm['replica'].keys(),
+            self.farm.farm['replica'].keys(),
             ['replica_0', 'replica_1']
         )
 
     def test_farm_get(self, mopen):
         mopen.return_value = mock.MagicMock(spec=file)
 
-        f = farm.Farm(num_acceptors=3, num_replicas=2, num_leaders=1)
         self.assertEqual(
-            f.get('replica', 'replica_1').ask({'command': 'name'}),
+            self.farm.get('replica', 'replica_1').ask({'command': 'name'}),
             'replica_1'
         )
 
     def test_farm_ask(self, mopen):
         mopen.return_value = mock.MagicMock(spec=file)
 
-        f = farm.Farm(num_acceptors=3, num_replicas=2, num_leaders=1)
         self.assertEqual(
-            f.ask('replica', 'replica_1', {'command': 'name'}),
+            self.farm.ask('replica', 'replica_1', {'command': 'name'}),
             'replica_1'
         )
         self.assertItemsEqual(
-            f.ask_all('replica', {'command': 'name'}),
+            self.farm.ask_all('replica', {'command': 'name'}),
             ['replica_0', 'replica_1']
         )
