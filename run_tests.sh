@@ -16,7 +16,7 @@ set -e
 
 ROOT=$(dirname $(readlink -f $0))
 UTILS_DIR="${ROOT}"
-TOX_PYENVS=${TOX_PYENVS:-"py26"}
+TOX_PYENVS=${TOX_PYENVS:-"py27"}
 
 certain_tests=()
 flake8_checks=1
